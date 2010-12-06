@@ -6,7 +6,8 @@
 //
 // File: freelance2010.java
 //
-// Description: This is the primary driver for the Team 443 robot.
+// Description: This is the primary driver for the Team 443 robot. This is a
+// port from Labview to Java.
 //
 // Lead: TBD
 // ----------------------------------------------------------------------------
