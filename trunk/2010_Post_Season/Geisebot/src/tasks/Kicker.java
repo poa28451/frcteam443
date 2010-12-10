@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj.Jaguar;
 public class Kicker {
 
     private Jaguar Kicker;
+    private boolean Slow_Kick_On = false;
+
 
     public Kicker(){
 
@@ -34,17 +36,39 @@ public class Kicker {
                                boolean Slow_Kick_Button,
                                boolean Reverse_Kick_Button){
 
+
+        if(Slow_Kick_On){
+
+            if(Fast_Kick_Button){
+                Kicker.set(0.9);
+                Slow_Kick_On = false;
+            }
+            else if(Slow_Kick_Button){
+                Kicker.set(0);
+                Slow_Kick_On = false;
+            }
+            else if(Reverse_Kick_Button){
+                Kicker.set(-0.2);
+            }else{
+                Kicker.set(0.5);
+            }
+
+        } else{
+
         if(Fast_Kick_Button){
             Kicker.set(0.9);
         }
         else if(Slow_Kick_Button){
             Kicker.set(0.5);
+            Slow_Kick_On = true;
         }
         else if(Reverse_Kick_Button){
             Kicker.set(-0.2);
         }
         else {
             Kicker.set(0);
+        }
+
         }
     }
 
