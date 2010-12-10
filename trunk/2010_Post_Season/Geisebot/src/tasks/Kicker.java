@@ -9,6 +9,10 @@
 // Description: Primary task logic for the kicking mechanism
 //
 // Lead: TBD
+//
+// Revision Log:
+// 12/1  - First design of kicker task (Mark)
+// 12/10 - Fixed bug so kicker will turn off after turning on (Kyle)
 // ----------------------------------------------------------------------------
 
 package tasks;
