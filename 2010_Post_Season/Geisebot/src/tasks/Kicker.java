@@ -39,6 +39,9 @@ public class Kicker {
         else if(Reverse_Kick_Button){
             Kicker.set(-0.2);
         }
+        else {
+            Kicker.set(0);
+        }
     }
 
 }
