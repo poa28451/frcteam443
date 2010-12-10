@@ -31,11 +31,11 @@ public class Mecanum_Drive {
 
     // Set to true or false depending on if you want to test the robot with or
     // without the yaw controller enabled
-    boolean Enable_Yaw_Control = true;
+    private boolean Enable_Yaw_Control = true;
 
     // Boolean (true/false) value used to easily enable or disable deadband
     // elimination for full drive system
-    boolean Enable_Deadband_Elimination = true;
+    private boolean Enable_Deadband_Elimination = true;
 
     // Constructor (initialization) for the Mecanum_Drive Task
     public Mecanum_Drive() {
