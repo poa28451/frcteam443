@@ -60,7 +60,7 @@ public class Mecanum_Drive {
         final int GYRO_YAW_CHANNEL = 1;
 
         // PID Parameters
-        double PID_Kp = -0.01;
+        double PID_Kp = -0.05;  //-0.01
         double PID_Ki = 0;
         double PID_Kd = -0.001;
 
@@ -104,8 +104,9 @@ public class Mecanum_Drive {
 
         // Initialize the current setpoint to zero which will match the starting
         // gyro heading angle
-        Yaw_Controller.setSetpoint(FL_Gyro.getAngle());
-
+        //Yaw_Controller.setSetpoint(FL_Gyro.getAngle());
+        Yaw_Controller.setSetpoint(0);
+        
         // Set the input range to a large range so the robot can spin in circles
         // as much as the driver wants
         Yaw_Controller.setInputRange(-3600000, 3600000);
@@ -134,10 +135,10 @@ public class Mecanum_Drive {
             // Use holonomic driver where the rotation input is the yaw controller
             FL_RobotDrive.holonomicDrive(Joystick_Magnitude,
                     Joystick_Direction,
-                    Yaw_Controller.performPID());
+                    Yaw_Controller.performPID()/2 );
 
             // !!!!DEBUG!!!
-            System.out.println(Yaw_Controller.performPID());
+            //System.out.println(FL_Gyro.getAngle());
 
 
             // Automatic setpoints for buttons 1 through 4
