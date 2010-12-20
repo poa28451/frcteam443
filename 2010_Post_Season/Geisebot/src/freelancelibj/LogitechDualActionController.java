@@ -11,7 +11,6 @@
 //
 // Lead: TBD
 // ----------------------------------------------------------------------------
-
 package freelancelibj;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -22,8 +21,11 @@ public class LogitechDualActionController {
     private Joystick input;
     private double X_Val_Slow_Gain = -0.5;
     private double Y_Val_Slow_Gain = -0.6;
-    private double X_Val_Fast_Gain = -0.9;
-    private double Y_Val_Fast_Gain = -0.9;
+    private double X_Val_Fast_Gain = -1;
+    private double Y_Val_Fast_Gain = -0.7;
+//    double Y_Axis_Ramp_Val = 0;
+//    double interval = .01;
+//    double SpeedError;
 
     public LogitechDualActionController(int slot) {
         input = new Joystick(slot);
@@ -93,50 +95,79 @@ public class LogitechDualActionController {
         return this.input.getRawAxis(2);
     }
 
-    public double getMagnitude(){
+    public double getMagnitude() {
         return this.input.getMagnitude();
     }
 
-    public double getDirection(){
+    public double getDirection() {
         return this.input.getDirectionDegrees();
     }
 
     public double getFL_Magnitude() {
 
-            double Magnitude;
-            double Logitech_Joystick_Cutoff_Value = 0.05;
-            double X_Axis_Val = X_Val_Fast_Gain * this.getAxisX();
-            double Y_Axis_Val = Y_Val_Fast_Gain * this.getAxisY();
-            //double X_Axis_Val = X_Val_Slow_Gain * this.getAxisX();
-            //double Y_Axis_Val = Y_Val_Slow_Gain * this.getAxisY();
+        double Magnitude;
+        double Logitech_Joystick_Cutoff_Value = 0.05;
+        double X_Axis_Val = X_Val_Fast_Gain * this.getAxisX();
+        double Y_Axis_Val = Y_Val_Fast_Gain * this.getAxisY();
+        //double X_Axis_Val = X_Val_Slow_Gain * this.getAxisX();
+        //double Y_Axis_Val = Y_Val_Slow_Gain * this.getAxisY();
 
-            // Logitech potentiometer calibration logic: This logic is designed
-            // to stop the wheels from moving when the user takes their hand off
-            // the joystick. Sometimes the joystick sticks and leaves a small bias
-            // applied to the motors. If the absolute value of the X and Y axis
-            // values are less than the parameterized Logitech Joystick Cutoff
-            // Value then set the X and Y axis values to 0. Otherwise use the
-            // value read from the joystick.
-            if(Math.abs(X_Axis_Val) < Logitech_Joystick_Cutoff_Value){
-                X_Axis_Val = 0;
-            }
+        // Logitech potentiometer calibration logic: This logic is designed
+        // to stop the wheels from moving when the user takes their hand off
+        // the joystick. Sometimes the joystick sticks and leaves a small bias
+        // applied to the motors. If the absolute value of the X and Y axis
+        // values are less than the parameterized Logitech Joystick Cutoff
+        // Value then set the X and Y axis values to 0. Otherwise use the
+        // value read from the joystick.
+        if (Math.abs(X_Axis_Val) < Logitech_Joystick_Cutoff_Value) {
+            X_Axis_Val = 0;
+        }
 
-            if(Math.abs(Y_Axis_Val) < Logitech_Joystick_Cutoff_Value){
-                Y_Axis_Val = 0;
-            }
+        if (Math.abs(Y_Axis_Val) < Logitech_Joystick_Cutoff_Value) {
+            Y_Axis_Val = 0;
+        }
 
-            // Calculate the magnitude of the joystick from the driver.
-            Magnitude = Math.sqrt(MathUtils.pow(X_Axis_Val,2) + MathUtils.pow(Y_Axis_Val,2));
+        // Y Axis Value Ramping Code
+        //SpeedError = (Y_Axis_Val - Y_Axis_Ramp_Val);
 
-            return Magnitude;
+//        // If the absolute value of the speed error is greater than 0
+//        if (Math.abs(SpeedError) > 0.0001) {
+//
+//            // If the absolute of the speed error is greater than the predefined
+//            // interval
+//            if (Math.abs(SpeedError) > interval) {
+//
+//                if (SpeedError > 0) {
+//                    Y_Axis_Ramp_Val = Y_Axis_Ramp_Val + interval;
+//                } else {
+//                    Y_Axis_Ramp_Val = Y_Axis_Ramp_Val - interval;
+//                }
+//            } else {
+//                Y_Axis_Ramp_Val = Y_Axis_Val;
+//            }
+//
+//            if (Y_Axis_Ramp_Val >= 0.9){
+//                Y_Axis_Ramp_Val = 1;
+//            }
+//
+//            if (Y_Axis_Ramp_Val <= -0.9){
+//                Y_Axis_Ramp_Val = -1;
+//            }
+//
+//        } // End Ramp code
+
+        // Calculate the magnitude of the joystick from the driver.
+        //Magnitude = Math.sqrt(MathUtils.pow(X_Axis_Val, 2) + MathUtils.pow(Y_Axis_Ramp_Val, 2));
+        Magnitude = Math.sqrt(MathUtils.pow(X_Axis_Val, 2) + MathUtils.pow(Y_Axis_Val, 2));
+
+        return Magnitude;
     }
 
     public double getFL_Direction() {
 
-        double test = this.input.getRawAxis(1);
         double X_Axis_Val = this.getAxisX();
-        double Y_Axis_Val = this.getAxisY();
-        double DirectionDegrees = Math.toDegrees(MathUtils.atan2(Y_Axis_Val,X_Axis_Val));
+        double Y_Axis_Val = -1 * this.getAxisY();
+        double DirectionDegrees = Math.toDegrees(MathUtils.atan2(Y_Axis_Val, X_Axis_Val));
         return DirectionDegrees;
     }
 }

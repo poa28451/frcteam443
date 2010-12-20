@@ -60,7 +60,7 @@ public class Mecanum_Drive {
         final int GYRO_YAW_CHANNEL = 1;
 
         // PID Parameters
-        double PID_Kp = -0.05;  //-0.01
+        double PID_Kp = -0.03;  //-0.01
         double PID_Ki = 0;
         double PID_Kd = -0.001;
 
