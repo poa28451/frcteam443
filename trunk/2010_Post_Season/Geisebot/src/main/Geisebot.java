@@ -79,9 +79,9 @@ public class Geisebot extends IterativeRobot {
         /* Execute the kicker task with controller inputs. TODO! Need to
          * confirm buttons!
          */
-       // Kicker_Task.Perform_Teleop(Controller.getL1(),
-        //                           Controller.getL2(),
-         //                          Controller.getButton10());
+       Kicker_Task.Perform_Teleop(Controller.getL1(),
+                                   Controller.getL2(),
+                                   Controller.getButton10());
 
     }
 }
