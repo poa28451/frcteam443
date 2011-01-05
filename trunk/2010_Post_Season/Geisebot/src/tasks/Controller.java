@@ -11,12 +11,12 @@
 //
 // Lead: TBD
 // ----------------------------------------------------------------------------
-package freelancelibj;
+package tasks;
 
 import edu.wpi.first.wpilibj.Joystick;
 import com.sun.squawk.util.MathUtils;
 
-public class LogitechDualActionController {
+public class Controller {
 
     private Joystick input;
     private double X_Val_Slow_Gain = -0.5;
@@ -27,7 +27,7 @@ public class LogitechDualActionController {
 //    double interval = .01;
 //    double SpeedError;
 
-    public LogitechDualActionController(int slot) {
+    public Controller(int slot) {
         input = new Joystick(slot);
     }
 
@@ -47,19 +47,19 @@ public class LogitechDualActionController {
         return this.input.getRawButton(4);
     }
 
-    public boolean getL1() {
+    public boolean getButton7() {
         return this.input.getRawButton(7);
     }
 
-    public boolean getL2() {
+    public boolean getButton5() {
         return this.input.getRawButton(5);
     }
 
-    public boolean getR1() {
+    public boolean getButton8() {
         return this.input.getRawButton(8);
     }
 
-    public boolean getR2() {
+    public boolean getButton6() {
         return this.input.getRawButton(6);
     }
 

@@ -16,7 +16,7 @@
 
 package freelancelibj;
 
-public class FL_PIDController {
+public class PIDController {
 
     private double m_P;			// factor for "proportional" control
     private double m_I;			// factor for "integral" control
@@ -41,7 +41,7 @@ public class FL_PIDController {
      * @param Ki the integral coefficient
      * @param Kd the derivative coefficient
      */
-    public FL_PIDController(double Kp, double Ki, double Kd) {
+    public PIDController(double Kp, double Ki, double Kd) {
 
         m_P = Kp;
         m_I = Ki;

@@ -15,16 +15,13 @@
 package main;
 import  edu.wpi.first.wpilibj.IterativeRobot;
 
-// Import the 443 Java Library Logitech Dual Action Controller class
-import freelancelibj.LogitechDualActionController;
-
 // Import all tasks in the task package
 import tasks.*;
 
 public class Geisebot extends IterativeRobot {
 
-    private LogitechDualActionController Controller;
-    private Mecanum_Drive                Mecanum_Drive_Task;
+    private Controller Controller;
+    private MecanumDrive                Mecanum_Drive_Task;
     private Kicker                       Kicker_Task;
 
     /*
@@ -35,10 +32,10 @@ public class Geisebot extends IterativeRobot {
     public void robotInit() {
 
         // Activate the Logitech_Dual_Action controller as the FL_Controller
-        Controller = new LogitechDualActionController(1);
+        Controller = new Controller(1);
 
         // Mecanum drive constructor and initialization routine.
-        Mecanum_Drive_Task = new Mecanum_Drive();
+        Mecanum_Drive_Task = new MecanumDrive();
 
         // Kicker initialization
         Kicker_Task = new Kicker();
@@ -79,8 +76,8 @@ public class Geisebot extends IterativeRobot {
         /* Execute the kicker task with controller inputs. TODO! Need to
          * confirm buttons!
          */
-       Kicker_Task.Perform_Teleop(Controller.getL1(),
-                                   Controller.getL2(),
+       Kicker_Task.Perform_Teleop(Controller.getButton6(),
+                                   Controller.getButton8(),
                                    Controller.getButton10());
 
     }
