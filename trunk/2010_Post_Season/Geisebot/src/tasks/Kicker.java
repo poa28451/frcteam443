@@ -28,7 +28,7 @@ public class Kicker {
 
     public Kicker(){
 
-        Kicker = new Jaguar(4,5);
+        Kicker = new Jaguar(Constants.DIO_SLOT, Constants.KICKER_CHNL);
 
     }
 

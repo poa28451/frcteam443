@@ -65,10 +65,10 @@ public class Mecanum_Drive {
         double PID_Kd = -0.001;
 
         // Instantiate all four motors
-        FL_Front_Left_Motor = new Jaguar(JAGUAR_DIO_SLOT, JAGUAR_FL_CHANNEL);
-        FL_Front_Right_Motor = new Jaguar(JAGUAR_DIO_SLOT, JAGUAR_FR_CHANNEL);
-        FL_Rear_Left_Motor = new Jaguar(JAGUAR_DIO_SLOT, JAGUAR_RL_CHANNEL);
-        FL_Rear_Right_Motor = new Jaguar(JAGUAR_DIO_SLOT, JAGUAR_RR_CHANNEL);
+        FL_Front_Left_Motor = new Jaguar(Constants.DIO_SLOT, Constants.FL_CHNL);
+        FL_Front_Right_Motor = new Jaguar(Constants.DIO_SLOT, Constants.FR_CHNL);
+        FL_Rear_Left_Motor = new Jaguar(Constants.DIO_SLOT, Constants.RL_CHNL);
+        FL_Rear_Right_Motor = new Jaguar(Constants.DIO_SLOT, Constants.RR_CHNL);
 
 
         // If deadband is enabled then modify the speed controller parameters
@@ -97,7 +97,7 @@ public class Mecanum_Drive {
         FL_RobotDrive.setInvertedMotor(MotorType.kRearRight, true);
 
         // Create a new instance of the gyro
-        FL_Gyro = new Gyro(GYRO_YAW_CHANNEL);
+        FL_Gyro = new Gyro(Constants.ANLG_SLOT, Constants.GYRO_CHNL);
 
         // Create a new instance of the Freelance PID_Controller
         Yaw_Controller = new FL_PIDController(PID_Kp, PID_Ki, PID_Kd);
