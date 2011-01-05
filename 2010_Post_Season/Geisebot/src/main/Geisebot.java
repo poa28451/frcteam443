@@ -23,6 +23,7 @@ public class Geisebot extends IterativeRobot {
     //private Controller Controller;
     private MecanumDrive                Mecanum_Drive_Task;
     private Kicker                       Kicker_Task;
+    //private Autonomous                   Autonomous_Task;
 
     /*
     =========================================================================
@@ -40,6 +41,8 @@ public class Geisebot extends IterativeRobot {
         // Kicker initialization
         Kicker_Task = new Kicker();
 
+        //Autonomous_Task = new Autonomous();
+
 
     }
 
@@ -49,6 +52,8 @@ public class Geisebot extends IterativeRobot {
     =========================================================================
      */
     public void autonomousPeriodic() {
+
+        //Autonomous_Task.performAutonomous();
 
 
 

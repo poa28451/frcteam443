@@ -109,6 +109,15 @@ public class MecanumDrive {
 
     }
 
+    public void autonomousDrive(double Magnitude, double Direction) {
+
+        // Get the gyro angle
+        Yaw_Controller.getInput(FL_Gyro.getAngle());
+
+        FL_RobotDrive.holonomicDrive(Magnitude, Direction, Yaw_Controller.performPID());
+
+    }
+
     // This is the driver method for the Mecanum_Drive task
     public void Perform_Teleop() {
 
