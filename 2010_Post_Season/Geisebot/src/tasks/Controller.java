@@ -18,157 +18,214 @@ import com.sun.squawk.util.MathUtils;
 
 public class Controller {
 
-    private Joystick input;
-    private double X_Val_Slow_Gain = -0.5;
-    private double Y_Val_Slow_Gain = -0.6;
-    private double X_Val_Fast_Gain = -1;
-    private double Y_Val_Fast_Gain = -0.7;
-//    double Y_Axis_Ramp_Val = 0;
-//    double interval = .01;
-//    double SpeedError;
+    // Joystick object (Note that it is static to allow multiple controller
+    // instantiations
+    public static Joystick input;
+
+    // Constants
+    final static double X_AXIS_SLOW_GAIN = 0.5;
+    final static double Y_AXIS_SLOW_GAIN = -0.6;
+    final static double X_AXIS_FAST_GAIN = 1;
+    final static double Y_AXIS_FAST_GAIN = -0.7;
+    final static double JOYSTICK_DEADBAND = 0.05;
+
+    // Variables for working with joystick readings
+    private double leftStickMagnitude = 0.0;
+    private double leftStickDirection = 0.0;
+    private double leftStickXAxisVal = 0.0;
+    private double leftStickYAxisVal = 0.0;
+
+    // Joystick ramping values
+    private double leftStickXAxisRampVal = 0.0;
+    private double leftStickYAxisRampVal = 0.0;
+    final static double RAMP_INTERVAL = 0.05;
 
     public Controller(int slot) {
         input = new Joystick(slot);
     }
 
     public boolean getButton1() {
-        return this.input.getRawButton(1);
+        return input.getRawButton(1);
     }
 
     public boolean getButton2() {
-        return this.input.getRawButton(2);
+        return input.getRawButton(2);
     }
 
     public boolean getButton3() {
-        return this.input.getRawButton(3);
+        return input.getRawButton(3);
     }
 
     public boolean getButton4() {
-        return this.input.getRawButton(4);
-    }
-
-    public boolean getButton7() {
-        return this.input.getRawButton(7);
+        return input.getRawButton(4);
     }
 
     public boolean getButton5() {
-        return this.input.getRawButton(5);
-    }
-
-    public boolean getButton8() {
-        return this.input.getRawButton(8);
+        return input.getRawButton(5);
     }
 
     public boolean getButton6() {
-        return this.input.getRawButton(6);
+        return input.getRawButton(6);
     }
 
-    public boolean getButton10() {
-        return this.input.getRawButton(10);
+    public boolean getButton7() {
+        return input.getRawButton(7);
+    }
+
+    public boolean getButton8() {
+        return input.getRawButton(8);
     }
 
     public boolean getButton9() {
-        return this.input.getRawButton(9);
+        return input.getRawButton(9);
+    }
+
+    public boolean getButton10() {
+        return input.getRawButton(10);
     }
 
     public double getLeftStickY() {
-        return this.input.getY();
+        return input.getY();
     }
 
     public double getLeftStickX() {
-        return this.input.getX();
+        return input.getX();
     }
 
     public double getRightStickY() {
-        return this.input.getTwist();
+        return input.getTwist();
     }
 
     public double getRightStickX() {
-        return this.input.getThrottle();
+        return input.getThrottle();
     }
 
-    public double getAxisY() {
-        return this.input.getRawAxis(1);
+    public double getLeftStickMagnitude() {
+
+        // Apply speed multipliers, fix wheel orientation, and mecanum wheel
+        // direction (Note: XAxis = getLeftStickY and YAxis = getLeftStickY is
+        // done on purpose. This is because this robot has a rotated drivetrain)
+        leftStickXAxisVal = X_AXIS_FAST_GAIN * this.getLeftStickY();
+        leftStickYAxisVal = Y_AXIS_FAST_GAIN * this.getLeftStickX();
+
+        performStickDeadbandCompensation();
+
+        calculateLeftStickMagnitude();
+
+        return leftStickMagnitude;
     }
 
-    public double getAxisX() {
-        return this.input.getRawAxis(2);
+    public double getLeftStickMagnitude(double xVal, double yVal) {
+
+        // Apply speed multipliers, fix wheel orientation, and mecanum wheel
+        // direction (Note: XAxis = getLeftStickY and YAxis = getLeftStickY is
+        // done on purpose. This is because this robot has a rotated drivetrain)
+        leftStickXAxisVal = X_AXIS_FAST_GAIN * yVal;
+        leftStickYAxisVal = Y_AXIS_FAST_GAIN * xVal;
+
+        performStickDeadbandCompensation();
+
+        calculateLeftStickMagnitude();
+
+        return leftStickMagnitude;
     }
 
-    public double getMagnitude() {
-        return this.input.getMagnitude();
+    public double getLeftStickDirection() {
+
+        // Apply speed multipliers, fix wheel orientation, and mecanum wheel
+        // direction (Note: XAxis = getLeftStickY and YAxis = getLeftStickY is
+        // done on purpose. This is because this robot has a rotated drivetrain)
+        leftStickXAxisVal = X_AXIS_FAST_GAIN * this.getLeftStickY();
+        leftStickYAxisVal = Y_AXIS_FAST_GAIN * this.getLeftStickX();
+
+        performStickDeadbandCompensation();
+
+        calculateLeftStickDirection();
+
+        return leftStickDirection;
     }
 
-    public double getDirection() {
-        return this.input.getDirectionDegrees();
+    public double getLeftStickDirection(double xVal, double yVal) {
+
+        // Apply speed multipliers, fix wheel orientation, and mecanum wheel
+        // direction (Note: XAxis = getLeftStickY and YAxis = getLeftStickY is
+        // done on purpose. This is because this robot has a rotated drivetrain)
+        leftStickXAxisVal = X_AXIS_FAST_GAIN * yVal;
+        leftStickYAxisVal = Y_AXIS_FAST_GAIN * xVal;
+
+        performStickDeadbandCompensation();
+
+        calculateLeftStickDirection();
+
+        return leftStickDirection;
+
+
     }
 
-    public double getFL_Magnitude() {
+    private void calculateLeftStickMagnitude() {
 
-        double Magnitude;
-        double Logitech_Joystick_Cutoff_Value = 0.05;
-        double X_Axis_Val = X_Val_Fast_Gain * this.getAxisX();
-        double Y_Axis_Val = Y_Val_Fast_Gain * this.getAxisY();
-        //double X_Axis_Val = X_Val_Slow_Gain * this.getAxisX();
-        //double Y_Axis_Val = Y_Val_Slow_Gain * this.getAxisY();
+        // Calculate the magnitude of the left stick using sqrt(x^2+y^2)
+        leftStickMagnitude = Math.sqrt(MathUtils.pow(leftStickXAxisVal, 2)
+                + MathUtils.pow(leftStickYAxisVal, 2));
+    }
 
-        // Logitech potentiometer calibration logic: This logic is designed
-        // to stop the wheels from moving when the user takes their hand off
-        // the joystick. Sometimes the joystick sticks and leaves a small bias
-        // applied to the motors. If the absolute value of the X and Y axis
-        // values are less than the parameterized Logitech Joystick Cutoff
-        // Value then set the X and Y axis values to 0. Otherwise use the
-        // value read from the joystick.
-        if (Math.abs(X_Axis_Val) < Logitech_Joystick_Cutoff_Value) {
-            X_Axis_Val = 0;
+    private void calculateLeftStickDirection() {
+
+        // Calculate the direction of the left stick using arctan(y/x)
+        leftStickDirection = Math.toDegrees(MathUtils.atan2(leftStickYAxisVal,
+                leftStickXAxisVal));
+    }
+
+    /** Compensates for deadband in the joystick.
+     *
+     *  If the value of the stick for both axes is below the
+     *  JOYSTICK_DEADBAND parameter then set the axis value to zero.
+     */
+    private void performStickDeadbandCompensation() {
+
+        // Controller deadband compensation for the x axis
+        if (Math.abs(leftStickXAxisVal) < JOYSTICK_DEADBAND) {
+            leftStickXAxisVal = 0;
         }
 
-        if (Math.abs(Y_Axis_Val) < Logitech_Joystick_Cutoff_Value) {
-            Y_Axis_Val = 0;
+        // Controller deadband compensation for the y axis
+        if (Math.abs(leftStickYAxisVal) < JOYSTICK_DEADBAND) {
+            leftStickYAxisVal = 0;
         }
-
-        // Y Axis Value Ramping Code
-        //SpeedError = (Y_Axis_Val - Y_Axis_Ramp_Val);
-
-//        // If the absolute value of the speed error is greater than 0
-//        if (Math.abs(SpeedError) > 0.0001) {
-//
-//            // If the absolute of the speed error is greater than the predefined
-//            // interval
-//            if (Math.abs(SpeedError) > interval) {
-//
-//                if (SpeedError > 0) {
-//                    Y_Axis_Ramp_Val = Y_Axis_Ramp_Val + interval;
-//                } else {
-//                    Y_Axis_Ramp_Val = Y_Axis_Ramp_Val - interval;
-//                }
-//            } else {
-//                Y_Axis_Ramp_Val = Y_Axis_Val;
-//            }
-//
-//            if (Y_Axis_Ramp_Val >= 0.9){
-//                Y_Axis_Ramp_Val = 1;
-//            }
-//
-//            if (Y_Axis_Ramp_Val <= -0.9){
-//                Y_Axis_Ramp_Val = -1;
-//            }
-//
-//        } // End Ramp code
-
-        // Calculate the magnitude of the joystick from the driver.
-        //Magnitude = Math.sqrt(MathUtils.pow(X_Axis_Val, 2) + MathUtils.pow(Y_Axis_Ramp_Val, 2));
-        Magnitude = Math.sqrt(MathUtils.pow(X_Axis_Val, 2) + MathUtils.pow(Y_Axis_Val, 2));
-
-        return Magnitude;
     }
 
-    public double getFL_Direction() {
+    private void joystickRamp() {
 
-        double X_Axis_Val = this.getAxisX();
-        double Y_Axis_Val = -1 * this.getAxisY();
-        double DirectionDegrees = Math.toDegrees(MathUtils.atan2(Y_Axis_Val, X_Axis_Val));
-        return DirectionDegrees;
+        double speedError;
+
+        //Y Axis Value Ramping Code
+        speedError = (leftStickYAxisVal - leftStickXAxisRampVal);
+
+        // If the absolute value of the speed error is greater than 0
+        if (Math.abs(speedError) > 0.0001) {
+
+            // If the absolute of the speed error is greater than the predefined
+            // interval
+            if (Math.abs(speedError) > RAMP_INTERVAL) {
+
+                if (speedError > 0) {
+                    leftStickXAxisRampVal = leftStickXAxisRampVal + RAMP_INTERVAL;
+                } else {
+                    leftStickXAxisRampVal = leftStickXAxisRampVal - RAMP_INTERVAL;
+                }
+            } else {
+                leftStickXAxisRampVal = leftStickYAxisVal;
+            }
+
+            if (leftStickXAxisRampVal >= 1.0) {
+                leftStickXAxisRampVal = 1.0;
+            }
+
+            if (leftStickXAxisRampVal <= -1.0) {
+                leftStickXAxisRampVal = -1.0;
+            }
+
+        }
+
     }
 }
-
