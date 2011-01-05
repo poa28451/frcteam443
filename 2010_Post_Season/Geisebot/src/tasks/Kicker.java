@@ -19,37 +19,34 @@ package tasks;
 
 import edu.wpi.first.wpilibj.Jaguar;
 
-
 public class Kicker {
 
     private Jaguar Kicker;
-    private boolean Slow_Kick_On = false;
-
+    private Controller kickerControl;
 
     public Kicker(){
 
         Kicker = new Jaguar(Constants.DIO_SLOT, Constants.KICKER_CHNL);
+        
+        kickerControl = new Controller();
 
     }
 
-    public void Perform_Teleop(boolean Fast_Kick_Button,
-                               boolean Slow_Kick_Button,
-                               boolean Reverse_Kick_Button){
-
-        if(Fast_Kick_Button){
+     public void Perform_Teleop(){
+        
+         if(kickerControl.getButton6()){
             Kicker.set(-0.9);
         }
-        else if(Slow_Kick_Button){
+        else if(kickerControl.getButton8()){
             Kicker.set(-0.5);
         }
-        else if(Reverse_Kick_Button){
+        else if(kickerControl.getButton10()){
             Kicker.set(0.2);
         }
         else {
             Kicker.set(0);
         }
 
-        //}
     }
 
 }
