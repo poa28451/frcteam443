@@ -28,6 +28,7 @@ public class MecanumDrive {
     private Jaguar FL_Rear_Right_Motor;
     private Gyro FL_Gyro;
     private PIDController Yaw_Controller;
+    private Controller driveControl;
 
     // Set to true or false depending on if you want to test the robot with or
     // without the yaw controller enabled
@@ -47,10 +48,6 @@ public class MecanumDrive {
         final int DBCENTER = 128;
         final int DBMINBAND = 118;
         final int DBMIN = 1;
-
-        // Gyro Parameters. Note that the Yaw channel designates rotation of the
-        // robot around the vertical axis.
-        final int GYRO_YAW_CHANNEL = 1;
 
         // PID Parameters
         double PID_Kp = -0.03;  //-0.01
@@ -107,16 +104,13 @@ public class MecanumDrive {
         // Enable the PID Controller
         Yaw_Controller.enable();
 
+        //
+        driveControl = new Controller();
+
     }
 
     // This is the driver method for the Mecanum_Drive task
-    public void Perform_Teleop(double Joystick_Magnitude,
-            double Joystick_Direction,
-            double Joystick_Rotation,
-            boolean Joystick_Button1,
-            boolean Joystick_Button2,
-            boolean Joystick_Button3,
-            boolean Joystick_Button4) {
+    public void Perform_Teleop() {
 
 
         // Perform logic below if the Yaw Controller is enabled
@@ -126,8 +120,8 @@ public class MecanumDrive {
             Yaw_Controller.getInput(FL_Gyro.getAngle());
 
             // Use holonomic driver where the rotation input is the yaw controller
-            FL_RobotDrive.holonomicDrive(Joystick_Magnitude,
-                    Joystick_Direction,
+            FL_RobotDrive.holonomicDrive(driveControl.getLeftStickMagnitude(),
+                    driveControl.getLeftStickDirection(),
                     Yaw_Controller.performPID()/2 );
 
             // !!!!DEBUG!!!
@@ -135,19 +129,19 @@ public class MecanumDrive {
 
 
             // Automatic setpoints for buttons 1 through 4
-            if (Joystick_Button1) {
+            if (driveControl.getButton2()) {
 
                 Yaw_Controller.setSetpoint(0.0);
 
-            } else if (Joystick_Button2) {
+            } else if (driveControl.getButton1()) {
 
                 Yaw_Controller.setSetpoint(45.0);
 
-            } else if (Joystick_Button3) {
+            } else if (driveControl.getButton3()) {
 
                 Yaw_Controller.setSetpoint(180.0);
 
-            } else if (Joystick_Button4) {
+            } else if (driveControl.getButton4()) {
 
                 Yaw_Controller.setSetpoint(-45.0);
 
@@ -160,9 +154,9 @@ public class MecanumDrive {
 
             // Drive the robot without the yaw controller. Note that rotation
             // is divided by two to make rotating it less responsive.
-            FL_RobotDrive.holonomicDrive(Joystick_Magnitude,
-                    Joystick_Direction,
-                    Joystick_Rotation / 2);
+            FL_RobotDrive.holonomicDrive(driveControl.getLeftStickMagnitude(),
+                    driveControl.getLeftStickDirection(),
+                    0);
         }
 
 

@@ -20,7 +20,7 @@ import tasks.*;
 
 public class Geisebot extends IterativeRobot {
 
-    private Controller Controller;
+    //private Controller Controller;
     private MecanumDrive                Mecanum_Drive_Task;
     private Kicker                       Kicker_Task;
 
@@ -32,7 +32,7 @@ public class Geisebot extends IterativeRobot {
     public void robotInit() {
 
         // Activate the Logitech_Dual_Action controller as the FL_Controller
-        Controller = new Controller(1);
+        Controller.initController(Constants.JOYSTICK1_CHNL);
 
         // Mecanum drive constructor and initialization routine.
         Mecanum_Drive_Task = new MecanumDrive();
@@ -61,24 +61,9 @@ public class Geisebot extends IterativeRobot {
      */
     public void teleopPeriodic() {
 
-        /* Execute the mecanum robot drive task. This tasks uses the joystick
-         * magnitude and direction as arguments and controls all four mecanum
-         * wheels on the robot.
-         */
-        Mecanum_Drive_Task.Perform_Teleop(Controller.getLeftStickMagnitude(),
-                                          Controller.getLeftStickDirection(),
-                                          Controller.getRightStickX(),
-                                          Controller.getButton1(),
-                                          Controller.getButton2(),
-                                          Controller.getButton3(),
-                                          Controller.getButton4());
+       Kicker_Task.Perform_Teleop();
 
-        /* Execute the kicker task with controller inputs. TODO! Need to
-         * confirm buttons!
-         */
-       Kicker_Task.Perform_Teleop(Controller.getButton6(),
-                                   Controller.getButton8(),
-                                   Controller.getButton10());
+       Mecanum_Drive_Task.Perform_Teleop();
 
     }
 }

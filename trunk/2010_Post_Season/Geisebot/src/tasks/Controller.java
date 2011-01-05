@@ -40,8 +40,12 @@ public class Controller {
     private double leftStickYAxisRampVal = 0.0;
     final static double RAMP_INTERVAL = 0.05;
 
-    public Controller(int slot) {
-        input = new Joystick(slot);
+    public Controller() {
+
+    }
+
+    public static void initController(int channel) {
+        input = new Joystick(channel);
     }
 
     public boolean getButton1() {
