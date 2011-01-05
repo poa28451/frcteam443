@@ -65,8 +65,8 @@ public class Geisebot extends IterativeRobot {
          * magnitude and direction as arguments and controls all four mecanum
          * wheels on the robot.
          */
-        Mecanum_Drive_Task.Perform_Teleop(Controller.getFL_Magnitude(),
-                                          Controller.getFL_Direction(),
+        Mecanum_Drive_Task.Perform_Teleop(Controller.getLeftStickMagnitude(),
+                                          Controller.getLeftStickDirection(),
                                           Controller.getRightStickX(),
                                           Controller.getButton1(),
                                           Controller.getButton2(),
