@@ -16,9 +16,9 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Gyro;
-import freelancelibj.FL_PIDController;
+import freelancelibj.PIDController;
 
-public class Mecanum_Drive {
+public class MecanumDrive {
 
     // Create variables for the wpilibj classes that we will use
     private RobotDrive FL_RobotDrive;
@@ -27,7 +27,7 @@ public class Mecanum_Drive {
     private Jaguar FL_Rear_Left_Motor;
     private Jaguar FL_Rear_Right_Motor;
     private Gyro FL_Gyro;
-    private FL_PIDController Yaw_Controller;
+    private PIDController Yaw_Controller;
 
     // Set to true or false depending on if you want to test the robot with or
     // without the yaw controller enabled
@@ -38,14 +38,7 @@ public class Mecanum_Drive {
     private boolean Enable_Deadband_Elimination = true;
 
     // Constructor (initialization) for the Mecanum_Drive Task
-    public Mecanum_Drive() {
-
-        // Jaguar Motor Controller parameters
-        final int JAGUAR_DIO_SLOT = 4;
-        final int JAGUAR_FL_CHANNEL = 1;
-        final int JAGUAR_FR_CHANNEL = 4;
-        final int JAGUAR_RL_CHANNEL = 2;
-        final int JAGUAR_RR_CHANNEL = 3;
+    public MecanumDrive() {
 
         // Initialize deadband parameters. Only need to mess with two parameters
         // here: dbMaxBand and dbMinBand.
@@ -100,7 +93,7 @@ public class Mecanum_Drive {
         FL_Gyro = new Gyro(Constants.ANLG_SLOT, Constants.GYRO_CHNL);
 
         // Create a new instance of the Freelance PID_Controller
-        Yaw_Controller = new FL_PIDController(PID_Kp, PID_Ki, PID_Kd);
+        Yaw_Controller = new PIDController(PID_Kp, PID_Ki, PID_Kd);
 
         // Initialize the current setpoint to zero which will match the starting
         // gyro heading angle
