@@ -1,14 +1,13 @@
 //----------------------------------------------------------------------------
-// Copyright (c) FIRST 2008. All Rights Reserved.
-// Open Source Software - may be modified and shared by FRC teams. The code
-// must be accompanied by the FIRST BSD license file in the root directory of
-// the project.
 //
-// File: Mecanum_Drive.java
+// Freelance Robotics, Team 443
+//
+// File: MecanumDrive.java
 //
 // Description: Primary task logic for the mecanum wheel drive system
 //
-// Lead: TBD
+// Change Log:
+// XX/XX - 
 // ----------------------------------------------------------------------------
 package tasks;
 
@@ -21,22 +20,22 @@ import freelancelibj.PIDController;
 public class MecanumDrive {
 
     // Create variables for the wpilibj classes that we will use
-    private RobotDrive FL_RobotDrive;
-    private Jaguar FL_Front_Left_Motor;
-    private Jaguar FL_Front_Right_Motor;
-    private Jaguar FL_Rear_Left_Motor;
-    private Jaguar FL_Rear_Right_Motor;
-    private Gyro FL_Gyro;
-    private PIDController Yaw_Controller;
+    private RobotDrive mecanumDrive;
+    private Jaguar frontLeftMotor;
+    private Jaguar frontRightMotor;
+    private Jaguar rearLeftMotor;
+    private Jaguar rearRightMotor;
+    private Gyro yawGyro;
+    private PIDController yawController;
     private Controller driveControl;
 
     // Set to true or false depending on if you want to test the robot with or
     // without the yaw controller enabled
-    private boolean Enable_Yaw_Control = true;
+    private boolean enableYawControl = true;
 
     // Boolean (true/false) value used to easily enable or disable deadband
     // elimination for full drive system
-    private boolean Enable_Deadband_Elimination = true;
+    private boolean enableDeadbandElimination = true;
 
     // Constructor (initialization) for the Mecanum_Drive Task
     public MecanumDrive() {
@@ -55,54 +54,54 @@ public class MecanumDrive {
         double PID_Kd = -0.001;
 
         // Instantiate all four motors
-        FL_Front_Left_Motor = new Jaguar(Constants.DIO_SLOT, Constants.FL_CHNL);
-        FL_Front_Right_Motor = new Jaguar(Constants.DIO_SLOT, Constants.FR_CHNL);
-        FL_Rear_Left_Motor = new Jaguar(Constants.DIO_SLOT, Constants.RL_CHNL);
-        FL_Rear_Right_Motor = new Jaguar(Constants.DIO_SLOT, Constants.RR_CHNL);
+        frontLeftMotor = new Jaguar(Constants.DIO_SLOT, Constants.FL_CHNL);
+        frontRightMotor = new Jaguar(Constants.DIO_SLOT, Constants.FR_CHNL);
+        rearLeftMotor = new Jaguar(Constants.DIO_SLOT, Constants.RL_CHNL);
+        rearRightMotor = new Jaguar(Constants.DIO_SLOT, Constants.RR_CHNL);
 
 
         // If deadband is enabled then modify the speed controller parameters
-        if (Enable_Deadband_Elimination) {
+        if (enableDeadbandElimination) {
 
             // Set the deadband bounds for each motor controller
-            FL_Front_Left_Motor.setBounds(DBMAX, DBMAXBAND, DBCENTER, DBMINBAND, DBMIN);
-            FL_Front_Right_Motor.setBounds(DBMAX, DBMAXBAND, DBCENTER, DBMINBAND, DBMIN);
-            FL_Rear_Left_Motor.setBounds(DBMAX, DBMAXBAND, DBCENTER, DBMINBAND, DBMIN);
-            FL_Rear_Right_Motor.setBounds(DBMAX, DBMAXBAND, DBCENTER, DBMINBAND, DBMIN);
+            frontLeftMotor.setBounds(DBMAX, DBMAXBAND, DBCENTER, DBMINBAND, DBMIN);
+            frontRightMotor.setBounds(DBMAX, DBMAXBAND, DBCENTER, DBMINBAND, DBMIN);
+            rearLeftMotor.setBounds(DBMAX, DBMAXBAND, DBCENTER, DBMINBAND, DBMIN);
+            rearRightMotor.setBounds(DBMAX, DBMAXBAND, DBCENTER, DBMINBAND, DBMIN);
 
             // Enable deadband elimination
-            FL_Front_Left_Motor.enableDeadbandElimination(true);
-            FL_Front_Right_Motor.enableDeadbandElimination(true);
-            FL_Rear_Left_Motor.enableDeadbandElimination(true);
-            FL_Rear_Right_Motor.enableDeadbandElimination(true);
+            frontLeftMotor.enableDeadbandElimination(true);
+            frontRightMotor.enableDeadbandElimination(true);
+            rearLeftMotor.enableDeadbandElimination(true);
+            rearRightMotor.enableDeadbandElimination(true);
         }
 
         // Create the robot drive with the four Jaguar objects
-        FL_RobotDrive = new RobotDrive(FL_Front_Left_Motor, FL_Rear_Left_Motor,
-                FL_Front_Right_Motor, FL_Rear_Right_Motor);
+        mecanumDrive = new RobotDrive(frontLeftMotor, rearLeftMotor,
+                frontRightMotor, rearRightMotor);
 
         // Invert the front right and rear right motor directions. This is necessary
         // for the mecanum wheels to work correctly.
-        FL_RobotDrive.setInvertedMotor(MotorType.kFrontRight, true);
-        FL_RobotDrive.setInvertedMotor(MotorType.kRearRight, true);
+        mecanumDrive.setInvertedMotor(MotorType.kFrontRight, true);
+        mecanumDrive.setInvertedMotor(MotorType.kRearRight, true);
 
         // Create a new instance of the gyro
-        FL_Gyro = new Gyro(Constants.ANLG_SLOT, Constants.GYRO_CHNL);
+        yawGyro = new Gyro(Constants.ANLG_SLOT, Constants.GYRO_CHNL);
 
         // Create a new instance of the Freelance PID_Controller
-        Yaw_Controller = new PIDController(PID_Kp, PID_Ki, PID_Kd);
+        yawController = new PIDController(PID_Kp, PID_Ki, PID_Kd);
 
         // Initialize the current setpoint to zero which will match the starting
         // gyro heading angle
-        //Yaw_Controller.setSetpoint(FL_Gyro.getAngle());
-        Yaw_Controller.setSetpoint(0);
+        //yawController.setSetpoint(yawGyro.getAngle());
+        yawController.setSetpoint(0);
         
         // Set the input range to a large range so the robot can spin in circles
         // as much as the driver wants
-        Yaw_Controller.setInputRange(-3600000, 3600000);
+        yawController.setInputRange(-3600000, 3600000);
 
         // Enable the PID Controller
-        Yaw_Controller.enable();
+        yawController.enable();
 
         //
         driveControl = new Controller();
@@ -112,9 +111,9 @@ public class MecanumDrive {
     public void autonomousDrive(double Magnitude, double Direction) {
 
         // Get the gyro angle
-        Yaw_Controller.getInput(FL_Gyro.getAngle());
+        yawController.getInput(yawGyro.getAngle());
 
-        FL_RobotDrive.holonomicDrive(Magnitude, Direction, Yaw_Controller.performPID());
+        mecanumDrive.holonomicDrive(Magnitude, Direction, yawController.performPID());
 
     }
 
@@ -123,36 +122,36 @@ public class MecanumDrive {
 
 
         // Perform logic below if the Yaw Controller is enabled
-        if (Enable_Yaw_Control) {
+        if (enableYawControl) {
 
             // Get the gyro angle
-            Yaw_Controller.getInput(FL_Gyro.getAngle());
+            yawController.getInput(yawGyro.getAngle());
 
             // Use holonomic driver where the rotation input is the yaw controller
-            FL_RobotDrive.holonomicDrive(driveControl.getLeftStickMagnitude(),
+            mecanumDrive.holonomicDrive(driveControl.getLeftStickMagnitude(),
                     driveControl.getLeftStickDirection(),
-                    Yaw_Controller.performPID()/2 );
+                    yawController.performPID()/2 );
 
             // !!!!DEBUG!!!
-            //System.out.println(FL_Gyro.getAngle());
+            //System.out.println(yawGyro.getAngle());
 
 
             // Automatic setpoints for buttons 1 through 4
             if (driveControl.getButton2()) {
 
-                Yaw_Controller.setSetpoint(0.0);
+                yawController.setSetpoint(0.0);
 
             } else if (driveControl.getButton1()) {
 
-                Yaw_Controller.setSetpoint(45.0);
+                yawController.setSetpoint(45.0);
 
             } else if (driveControl.getButton3()) {
 
-                Yaw_Controller.setSetpoint(180.0);
+                yawController.setSetpoint(180.0);
 
             } else if (driveControl.getButton4()) {
 
-                Yaw_Controller.setSetpoint(-45.0);
+                yawController.setSetpoint(-45.0);
 
             }
 
@@ -163,7 +162,7 @@ public class MecanumDrive {
 
             // Drive the robot without the yaw controller. Note that rotation
             // is divided by two to make rotating it less responsive.
-            FL_RobotDrive.holonomicDrive(driveControl.getLeftStickMagnitude(),
+            mecanumDrive.holonomicDrive(driveControl.getLeftStickMagnitude(),
                     driveControl.getLeftStickDirection(),
                     0);
         }

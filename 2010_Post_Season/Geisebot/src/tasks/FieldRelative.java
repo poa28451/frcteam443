@@ -1,15 +1,31 @@
+//----------------------------------------------------------------------------
+//
+// Freelance Robotics, Team 443
+//
+// File: FieldRelative.java
+//
+// Description: Utility for field relative driving
+//
+// Revision Log:
+// 12/19 - Created the FieldRelative class with initial logic (incomplete)
+// 12/30 - Finalized preliminary code
+// ----------------------------------------------------------------------------
+
+
 package tasks;
 
 public class FieldRelative {
 
-    double currentAngle = 0;
-    double initialAngle = 0;
-    double joystickX_Pos = 0;
-    double joystickY_Pos = 0;
-    double transformX_Pos = 0;
-    double transformY_Pos = 0;
+    double currentAngle = 0.0;
+    double initialAngle = 0.0;
+    double joystickX_Pos = 0.0;
+    double joystickY_Pos = 0.0;
+    double transformX_Pos = 0.0;
+    double transformY_Pos = 0.0;
 
     double[][] transformationMatrix = new double[1][1];
+
+    Controller fieldRelativeController;
 
     public FieldRelative() {
 
@@ -25,26 +41,23 @@ public class FieldRelative {
         transformationMatrix[1][0] =      Math.sin(initialAngle);
         transformationMatrix[1][1] =      Math.cos(initialAngle);
 
-    }
-
-    public double get_Field_Relative_Magnitude() {
-
-
-        double x = 1;
-
-        return x;
+        fieldRelativeController = new Controller();
 
     }
 
-    public double get_Field_Relative_Direction() {
+    public double getFieldRelativeMagnitude() {
 
-        double x = 1;
-
-        return x;
+        return fieldRelativeController.getLeftStickMagnitude(transformX_Pos, transformY_Pos);
 
     }
 
-    public void sendState(double gyroAngle,
+    public double getFieldRelativeDirection() {
+
+        return fieldRelativeController.getLeftStickDirection(transformX_Pos, transformY_Pos);
+
+    }
+
+    public void transformToFieldRelative(double gyroAngle,
             double joystickXAxis,
             double joystickYAxis) {
 
@@ -67,14 +80,14 @@ public class FieldRelative {
         transformationMatrix[0][1] = -1 * Math.sin(currentAngle);
         transformationMatrix[1][0] =      Math.sin(currentAngle);
         transformationMatrix[1][1] =      Math.cos(currentAngle);
-        
-        
+
+
         // Calculate the transformed x/y axis values
         transformX_Pos = joystickX_Pos * transformationMatrix[0][0] +
                          joystickY_Pos * transformationMatrix[0][1];
 
         transformY_Pos = joystickX_Pos * transformationMatrix[1][0] +
                          joystickY_Pos * transformationMatrix[1][1];
-        
+
     }
 }
