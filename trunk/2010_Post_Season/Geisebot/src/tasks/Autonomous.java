@@ -1,12 +1,12 @@
 //----------------------------------------------------------------------------
 //
-// FREELANCE ROBOTICS - TEAM 443
+// Freelance Robotics, Team 443
 //
 // File: Autonomous.java
 //
 // Description: Primary logic for the autonomous portion of the competition
 //
-// Revision Log:
+// Change Log:
 // 12/31 - Created autonomous class
 //
 // ----------------------------------------------------------------------------

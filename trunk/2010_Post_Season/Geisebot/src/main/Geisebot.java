@@ -1,15 +1,14 @@
 //----------------------------------------------------------------------------
-// Copyright (c) FIRST 2008. All Rights Reserved.
-// Open Source Software - may be modified and shared by FRC teams. The code
-// must be accompanied by the FIRST BSD license file in the root directory of
-// the project.
 //
-// File: freelance2010.java
+// Freelance Robotics, Team 443
+//
+// File: Geisebot.java
 //
 // Description: This is the primary driver for the Team 443 robot. This is a
 // port from Labview to Java.
 //
-// Lead: TBD
+// Change Log:
+// XX/XX - 
 // ----------------------------------------------------------------------------
 
 package main;

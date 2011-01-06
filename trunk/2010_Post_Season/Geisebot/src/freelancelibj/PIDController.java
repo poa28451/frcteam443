@@ -1,17 +1,16 @@
 //----------------------------------------------------------------------------
-// Copyright (c) FIRST 2008. All Rights Reserved.
-// Open Source Software - may be modified and shared by FRC teams. The code
-// must be accompanied by the FIRST BSD license file in the root directory of
-// the project.
 //
-// File: FL_PIDController.java
+// Freelance Robotics, Team 443
+//
+// File: PIDController.java
 //
 // Description: This PIDCOntroller class is a port from the FIRST PID Controller
 //              task. This port removes the additional thread overhead but it
 //              must run within a periodic task (not a continous task) to work
 //              correctly.
 //
-// Lead: Mark
+// Change Log:
+// XX/XX - ...
 // ----------------------------------------------------------------------------
 
 package freelancelibj;

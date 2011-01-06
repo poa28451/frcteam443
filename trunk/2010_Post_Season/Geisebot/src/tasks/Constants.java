@@ -1,11 +1,12 @@
 //----------------------------------------------------------------------------
 //
-// FREELANCE ROBOTICS - TEAM 443
+// Freelance Robotics, Team 443
 //
 // File: Constants.java
 //
-// Description:
+// Description: Constants for hardware
 //
+// Change Log:
 // 01/01 - ...
 // ----------------------------------------------------------------------------
 package tasks;
