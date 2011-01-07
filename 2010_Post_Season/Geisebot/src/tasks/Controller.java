@@ -43,8 +43,8 @@ public class Controller {
 
     }
 
-    public static void initController(int channel) {
-        input = new Joystick(channel);
+    public static void initController() {
+        input = new Joystick(Constants.JOYSTICK1_CHNL);
     }
 
     public boolean getButton1() {
