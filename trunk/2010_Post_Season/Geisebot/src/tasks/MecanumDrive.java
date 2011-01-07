@@ -45,6 +45,8 @@ public class MecanumDrive {
     private final static int DBCENTER = 128;
     private final static int DBMINBAND = 118;
     private final static int DBMIN = 1;
+    // Direction bias
+    private final static double DIRECTION_BIAS = 5.0;
 
     /**
      * Constructor for the mecanum drive system
@@ -52,7 +54,7 @@ public class MecanumDrive {
     public MecanumDrive(boolean enableTeleop) {
 
         if (enableTeleop) {
-            
+
             // Instantiate a controller object
             driveControl = new Controller();
         }
@@ -125,7 +127,8 @@ public class MecanumDrive {
         // Get the gyro angle
         yawController.getInput(yawGyro.getAngle());
 
-        mecanumDrive.holonomicDrive(Magnitude, Direction, yawController.performPID());
+        mecanumDrive.holonomicDrive(Magnitude, Direction + DIRECTION_BIAS,
+                yawController.performPID());
 
     }
 
@@ -141,7 +144,7 @@ public class MecanumDrive {
 
             // Use holonomic driver where the rotation input is the yaw controller
             mecanumDrive.holonomicDrive(driveControl.getLeftStickMagnitude(),
-                    driveControl.getLeftStickDirection(),
+                    driveControl.getLeftStickDirection() + DIRECTION_BIAS,
                     yawController.performPID() / 2);
         } // Perform the following if the Yaw Controller is not enabled
         else {
@@ -149,7 +152,7 @@ public class MecanumDrive {
             // Drive the robot without the yaw controller. Note that rotation
             // is divided by two to make rotating it less responsive.
             mecanumDrive.holonomicDrive(driveControl.getLeftStickMagnitude(),
-                    driveControl.getLeftStickDirection(), 0);
+                    driveControl.getLeftStickDirection() + DIRECTION_BIAS, 0);
         }
 
         performYawSetpoints();
@@ -162,11 +165,11 @@ public class MecanumDrive {
         if (driveControl.getButton2()) {
             yawController.setSetpoint(0.0);
         } else if (driveControl.getButton1()) {
-            yawController.setSetpoint(45.0);
-        } else if (driveControl.getButton3()) {
-            yawController.setSetpoint(180.0);
-        } else if (driveControl.getButton4()) {
             yawController.setSetpoint(-45.0);
+        } else if (driveControl.getButton3()) {
+            yawController.setSetpoint(45.0);
+        } else if (driveControl.getButton4()) {
+            yawController.setSetpoint(180.0);
         }
     }
 }
