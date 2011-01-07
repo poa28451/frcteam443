@@ -19,55 +19,59 @@ import tasks.*;
 
 public class Geisebot extends IterativeRobot {
 
-    //private Controller Controller;
-    private MecanumDrive                Mecanum_Drive_Task;
-    private Kicker                       Kicker_Task;
-    //private Autonomous                   Autonomous_Task;
+    private MecanumDrive                mecanumDriveTask;
+    private Kicker                       kickerTask;
+    private Autonomous                   autonomousTask;
 
-    /*
-    =========================================================================
-     * Robot Initialization
-    =========================================================================
+    /**
+     *
      */
     public void robotInit() {
 
         // Activate the Logitech_Dual_Action controller as the FL_Controller
-        Controller.initController(Constants.JOYSTICK1_CHNL);
+        Controller.initController();
 
-        // Mecanum drive constructor and initialization routine.
-        Mecanum_Drive_Task = new MecanumDrive();
+        // Initialize mecanum drive hardware
+        MecanumDrive.initMecanumDrive();
 
-        // Kicker initialization
-        Kicker_Task = new Kicker();
-
-        //Autonomous_Task = new Autonomous();
-
-
+        // Initialize kicker hardware
+        Kicker.initKicker();
     }
 
-    /*
-    =========================================================================
-     * Autonomous
-    =========================================================================
+    /**
+     *
+     */
+    public void autonomousInit(){
+       autonomousTask = new Autonomous();
+    }
+
+    /**
+     *
      */
     public void autonomousPeriodic() {
 
-        //Autonomous_Task.performAutonomous();
-
-
-
+        autonomousTask.performAutonomous();
     }
 
-    /*
-    =========================================================================
-     * Driver - This method runs at 100 Hz (100 times a second)
-    =========================================================================
+    /**
+     * 
+     */
+    public void teleopInit(){
+       
+        // Mecanum drive constructor and initialization routine.
+        mecanumDriveTask = new MecanumDrive(true);
+
+        // Kicker initialization
+        kickerTask = new Kicker(true);
+    }
+
+    /**
+     *
      */
     public void teleopPeriodic() {
 
-       Kicker_Task.Perform_Teleop();
+       kickerTask.Perform_Teleop();
 
-       Mecanum_Drive_Task.Perform_Teleop();
-
+       mecanumDriveTask.performTeleop();
     }
 }

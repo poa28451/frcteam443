@@ -20,38 +20,48 @@ import freelancelibj.PIDController;
 public class MecanumDrive {
 
     // Create variables for the wpilibj classes that we will use
-    private RobotDrive mecanumDrive;
-    private Jaguar frontLeftMotor;
-    private Jaguar frontRightMotor;
-    private Jaguar rearLeftMotor;
-    private Jaguar rearRightMotor;
-    private Gyro yawGyro;
-    private PIDController yawController;
+    private static RobotDrive mecanumDrive;
+    private static Jaguar frontLeftMotor;
+    private static Jaguar frontRightMotor;
+    private static Jaguar rearLeftMotor;
+    private static Jaguar rearRightMotor;
+    private static Gyro yawGyro;
+    private static PIDController yawController;
     private Controller driveControl;
-
     // Set to true or false depending on if you want to test the robot with or
     // without the yaw controller enabled
     private boolean enableYawControl = true;
-
     // Boolean (true/false) value used to easily enable or disable deadband
     // elimination for full drive system
-    private boolean enableDeadbandElimination = true;
+    private static boolean enableDeadbandElimination = true;
+    // PID Parameters
+    private static double Kp = -0.04;
+    private static double Ki = 0.00001;
+    private static double Kd = -0.001;
+    // Initialize deadband parameters. Only need to mess with two parameters
+    // here: dbMaxBand and dbMinBand.
+    private final static int DBMAX = 255;
+    private final static int DBMAXBAND = 138;
+    private final static int DBCENTER = 128;
+    private final static int DBMINBAND = 118;
+    private final static int DBMIN = 1;
 
-    // Constructor (initialization) for the Mecanum_Drive Task
-    public MecanumDrive() {
+    /**
+     * Constructor for the mecanum drive system
+     */
+    public MecanumDrive(boolean enableTeleop) {
 
-        // Initialize deadband parameters. Only need to mess with two parameters
-        // here: dbMaxBand and dbMinBand.
-        final int DBMAX = 255;
-        final int DBMAXBAND = 138;
-        final int DBCENTER = 128;
-        final int DBMINBAND = 118;
-        final int DBMIN = 1;
+        if (enableTeleop) {
+            
+            // Instantiate a controller object
+            driveControl = new Controller();
+        }
+    }
 
-        // PID Parameters
-        double PID_Kp = -0.03;  //-0.01
-        double PID_Ki = 0;
-        double PID_Kd = -0.001;
+    /**
+     * Static method used to initialize the mecanum drive system.
+     */
+    public static void initMecanumDrive() {
 
         // Instantiate all four motors
         frontLeftMotor = new Jaguar(Constants.DIO_SLOT, Constants.FL_CHNL);
@@ -89,25 +99,27 @@ public class MecanumDrive {
         yawGyro = new Gyro(Constants.ANLG_SLOT, Constants.GYRO_CHNL);
 
         // Create a new instance of the Freelance PID_Controller
-        yawController = new PIDController(PID_Kp, PID_Ki, PID_Kd);
+        yawController = new PIDController(Kp, Ki, Kd);
 
         // Initialize the current setpoint to zero which will match the starting
         // gyro heading angle
         //yawController.setSetpoint(yawGyro.getAngle());
         yawController.setSetpoint(0);
-        
+
         // Set the input range to a large range so the robot can spin in circles
         // as much as the driver wants
         yawController.setInputRange(-3600000, 3600000);
 
         // Enable the PID Controller
         yawController.enable();
-
-        //
-        driveControl = new Controller();
-
     }
 
+    /**
+     * A method used for autonomous driving.
+     * 
+     * @param Magnitude Joystick magnitude
+     * @param Direction Joystick direction
+     */
     public void autonomousDrive(double Magnitude, double Direction) {
 
         // Get the gyro angle
@@ -117,57 +129,44 @@ public class MecanumDrive {
 
     }
 
-    // This is the driver method for the Mecanum_Drive task
-    public void Perform_Teleop() {
-
+    /**
+     *
+     */
+    public void performTeleop() {
 
         // Perform logic below if the Yaw Controller is enabled
         if (enableYawControl) {
-
             // Get the gyro angle
             yawController.getInput(yawGyro.getAngle());
 
             // Use holonomic driver where the rotation input is the yaw controller
             mecanumDrive.holonomicDrive(driveControl.getLeftStickMagnitude(),
                     driveControl.getLeftStickDirection(),
-                    yawController.performPID()/2 );
-
-            // !!!!DEBUG!!!
-            //System.out.println(yawGyro.getAngle());
-
-
-            // Automatic setpoints for buttons 1 through 4
-            if (driveControl.getButton2()) {
-
-                yawController.setSetpoint(0.0);
-
-            } else if (driveControl.getButton1()) {
-
-                yawController.setSetpoint(45.0);
-
-            } else if (driveControl.getButton3()) {
-
-                yawController.setSetpoint(180.0);
-
-            } else if (driveControl.getButton4()) {
-
-                yawController.setSetpoint(-45.0);
-
-            }
-
-        }
-
-        // Perform the following if the Yaw Controller is not enabled
+                    yawController.performPID() / 2);
+        } // Perform the following if the Yaw Controller is not enabled
         else {
 
             // Drive the robot without the yaw controller. Note that rotation
             // is divided by two to make rotating it less responsive.
             mecanumDrive.holonomicDrive(driveControl.getLeftStickMagnitude(),
-                    driveControl.getLeftStickDirection(),
-                    0);
+                    driveControl.getLeftStickDirection(), 0);
         }
 
+        performYawSetpoints();
 
+    }
 
+    public void performYawSetpoints() {
+
+        // Automatic setpoints for buttons 1 through 4
+        if (driveControl.getButton2()) {
+            yawController.setSetpoint(0.0);
+        } else if (driveControl.getButton1()) {
+            yawController.setSetpoint(45.0);
+        } else if (driveControl.getButton3()) {
+            yawController.setSetpoint(180.0);
+        } else if (driveControl.getButton4()) {
+            yawController.setSetpoint(-45.0);
+        }
     }
 }
