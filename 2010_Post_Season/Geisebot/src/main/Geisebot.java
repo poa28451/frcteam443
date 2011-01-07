@@ -42,7 +42,8 @@ public class Geisebot extends IterativeRobot {
      *
      */
     public void autonomousInit(){
-       autonomousTask = new Autonomous();
+
+        autonomousTask = new Autonomous();
     }
 
     /**
@@ -50,7 +51,9 @@ public class Geisebot extends IterativeRobot {
      */
     public void autonomousPeriodic() {
 
-        autonomousTask.performAutonomous();
+        // Perform the autonomous task
+        // NOTE: Autonomous is turned off for demo purposes!
+        //autonomousTask.performAutonomous();
     }
 
     /**
