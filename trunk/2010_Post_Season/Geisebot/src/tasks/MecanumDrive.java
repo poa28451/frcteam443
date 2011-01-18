@@ -127,7 +127,7 @@ public class MecanumDrive {
         // Get the gyro angle
         yawController.getInput(yawGyro.getAngle());
 
-        mecanumDrive.holonomicDrive(Magnitude, Direction + DIRECTION_BIAS,
+        mecanumDrive.mecanumDrive_Polar(Magnitude, Direction + DIRECTION_BIAS,
                 yawController.performPID());
 
     }
@@ -142,17 +142,18 @@ public class MecanumDrive {
             // Get the gyro angle
             yawController.getInput(yawGyro.getAngle());
 
+            //yawController.setSetpoint(yawGyro.getAngle());
+            
             // Use holonomic driver where the rotation input is the yaw controller
-            mecanumDrive.holonomicDrive(driveControl.getLeftStickMagnitude(),
-                    driveControl.getLeftStickDirection() + DIRECTION_BIAS,
-                    yawController.performPID() / 2);
+            mecanumDrive.mecanumDrive_Cartesian(driveControl.getLeftStickX(),
+                    driveControl.getLeftStickY(), yawController.performPID(), 0);
         } // Perform the following if the Yaw Controller is not enabled
         else {
 
             // Drive the robot without the yaw controller. Note that rotation
             // is divided by two to make rotating it less responsive.
-            mecanumDrive.holonomicDrive(driveControl.getLeftStickMagnitude(),
-                    driveControl.getLeftStickDirection() + DIRECTION_BIAS, 0);
+           mecanumDrive.mecanumDrive_Cartesian(driveControl.getLeftStickX(),
+                    driveControl.getLeftStickY(), driveControl.getRightStickY(), 0);
         }
 
         performYawSetpoints();
