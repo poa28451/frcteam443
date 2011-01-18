@@ -22,10 +22,10 @@ public class Controller {
     public static Joystick input;
 
     // Constants
-    final static double X_AXIS_SLOW_GAIN = 0.5;
-    final static double Y_AXIS_SLOW_GAIN = -0.6;
-    final static double X_AXIS_FAST_GAIN = 1;
-    final static double Y_AXIS_FAST_GAIN = -0.7;
+    final static double X_AXIS_SLOW_GAIN = -0.5;
+    final static double Y_AXIS_SLOW_GAIN = 0.6;
+    final static double X_AXIS_FAST_GAIN = -0.8;
+    final static double Y_AXIS_FAST_GAIN = 0.7;
     final static double JOYSTICK_DEADBAND = 0.05;
 
     // Variables for working with joystick readings
@@ -88,11 +88,11 @@ public class Controller {
     }
 
     public double getLeftStickY() {
-        return input.getY();
+        return input.getY() * -0.7;
     }
 
     public double getLeftStickX() {
-        return input.getX();
+        return input.getX() * -0.8;
     }
 
     public double getRightStickY() {
