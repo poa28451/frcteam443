@@ -1,15 +1,3 @@
-//-----------------------------------------------------------------------------
-//
-// Freelance Robotics, FIRST Team 443
-//
-// File:        Freelance2011.java
-//
-// Description: This class is the entry into the Freelance Robotics 2011
-//              Logomotion game robot code.
-//
-// Change Log:  Mark      01/29      Project created
-//              
-// ----------------------------------------------------------------------------
 package org.freelance.main;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
