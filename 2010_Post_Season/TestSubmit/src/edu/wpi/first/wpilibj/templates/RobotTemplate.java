@@ -8,7 +8,9 @@
 package edu.wpi.first.wpilibj.templates;
 
 
+
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.RobotDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -18,6 +20,8 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * directory.
  */
 public class RobotTemplate extends IterativeRobot {
+
+    private RobotDrive drive;
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
