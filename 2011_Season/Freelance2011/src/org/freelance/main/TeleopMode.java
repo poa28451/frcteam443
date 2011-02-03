@@ -1,14 +1,3 @@
-//-----------------------------------------------------------------------------
-//
-// Freelance Robotics, FIRST Team 443
-//
-// File:        Teleop.java
-//
-// Description: WRITE DESCRIPTION!
-//
-// Change Log:  Mark      01/29      Project created
-//
-// ----------------------------------------------------------------------------
 package org.freelance.main;
 
 /**
