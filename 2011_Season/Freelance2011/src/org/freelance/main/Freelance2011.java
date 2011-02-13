@@ -1,7 +1,9 @@
 package org.freelance.main;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import org.freelance.sensors.Controller;
+
+import org.freelance.logic.Linetracking;
+import org.freelance.sensors.LogtechRemote;
 import org.freelance.sys.Arm;
 import org.freelance.sys.Claw;
 import org.freelance.sys.MecanumDrive;
@@ -23,11 +25,17 @@ public class Freelance2011 extends IterativeRobot {
      * System Objects
      * -Protected so that the operation(tele/auto) objects may access them.
      */
-    protected Controller driveControl;
-    protected Controller armControl;
+    protected LogtechRemote driveControl;
+    protected LogtechRemote  armControl;
     protected Claw claw;
     protected Arm arm;
     protected MecanumDrive mecanumDrive;
+
+    /**
+     * Logic Objects
+     * -Protected so that the operation(tele/auto) objects may access them.
+     */
+    protected Linetracking linetracking;
 
     /**
      * Robot startup initialization
@@ -37,11 +45,16 @@ public class Freelance2011 extends IterativeRobot {
         /**
          * Initiate System Objects
          */
-        driveControl = new Controller();
-        armControl = new Controller();
+        driveControl = new LogtechRemote();
+        armControl = new LogtechRemote();
         claw = new Claw();
         arm = new Arm();
         mecanumDrive = new MecanumDrive();
+
+        /**
+         * Initiate Logic Objects
+         */
+        linetracking = new Linetracking();
         
         /**
          * Initiate Auto/Tele Operations

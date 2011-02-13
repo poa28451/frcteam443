@@ -5,10 +5,19 @@
 
 package org.freelance.sensors;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+
 /**
  *
- * @author mark
+ * @author Freelance Robotics
  */
-public class Photoswitch {
+public class Photoswitch extends DigitalInput {
 
+    public Photoswitch(int channel) {
+        super(channel);
+    }
+
+    public Photoswitch(int slot, int channel) {
+        super(slot, channel);
+    }
 }
