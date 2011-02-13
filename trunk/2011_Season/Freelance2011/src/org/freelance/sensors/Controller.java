@@ -75,8 +75,8 @@ public class Controller extends Joystick {
         /*
          * Invert the Axis
          */
-        //xAxis *= -1;
-        //yAxis *= -1;
+        xAxis *= -1;
+        yAxis *= -1;
     }
 
     /**

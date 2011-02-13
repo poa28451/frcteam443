@@ -12,6 +12,10 @@ public class AutonomousMode {
      * @param robot
      */
     public void AutonomousProcess(Freelance2011 robot) {
-
+        //Positive(X) = Backward, Positive(Y) = Right
+        //Negitive(X) = Forward, Negitive(Y) = Left
+        //Positive Twist = ClockWise, Negitive = Counter ClockWise
+        //robot.mecanumDrive.autonomousDrive(0, 0, .5);
+        robot.linetracking.process(robot.mecanumDrive);
     }
 }

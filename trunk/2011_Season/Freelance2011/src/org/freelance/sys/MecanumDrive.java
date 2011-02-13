@@ -5,6 +5,7 @@
 
 package org.freelance.sys;
 
+import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
@@ -28,10 +29,10 @@ public class MecanumDrive {
      * -Front Right
      * -Rear Right
      */
-    private Jaguar flMotor;
-    private Jaguar rlMotor;
-    private Jaguar frMotor;
-    private Jaguar rrMotor;
+    private CANJaguar flMotor;
+    private CANJaguar rlMotor;
+    private CANJaguar frMotor;
+    private CANJaguar rrMotor;
 
     /**
      * Default Constructor
@@ -47,19 +48,38 @@ public class MecanumDrive {
         /**
          * Construct Motors
          */
-        flMotor = new Jaguar(Constants.DIO_SLOT, Constants.FL_CHNL);
-        rlMotor = new Jaguar(Constants.DIO_SLOT, Constants.FR_CHNL);
-        frMotor = new Jaguar(Constants.DIO_SLOT, Constants.RL_CHNL);
-        rrMotor = new Jaguar(Constants.DIO_SLOT, Constants.RR_CHNL);
+        try {
+            flMotor = new CANJaguar(Constants.FL_ID);
+        } catch(Exception e) {
+            System.out.println(Constants.FL_ID+" "+e.getMessage());
+        }
+        
+        try {
+            rlMotor = new CANJaguar(Constants.RL_ID);
+        } catch(Exception e) {
+            System.out.println(Constants.RL_ID+" "+e.getMessage());
+        }
+
+        try {
+            frMotor = new CANJaguar(Constants.FR_ID);
+        } catch(Exception e) {
+            System.out.println(Constants.FR_ID+" "+e.getMessage());
+        }
+
+        try {
+            rrMotor = new CANJaguar(Constants.RR_ID);
+        } catch(Exception e) {
+            System.out.println(Constants.RR_ID+" "+e.getMessage());
+        }
 
         /**
          * Set DeadbandElimination
          * -Always True
          */
-        flMotor.enableDeadbandElimination(true);
-        frMotor.enableDeadbandElimination(true);
-        rlMotor.enableDeadbandElimination(true);
-        rrMotor.enableDeadbandElimination(true);
+        //flMotor.enableDeadbandElimination(true);
+        //frMotor.enableDeadbandElimination(true);
+        //rlMotor.enableDeadbandElimination(true);
+        //rrMotor.enableDeadbandElimination(true);
         
         /**
          * Initialize RobotDrive
@@ -80,7 +100,7 @@ public class MecanumDrive {
         robotDrive.mecanumDrive_Cartesian(x , y, twist * -0.7, 0);
     }
 
-    public void autonomousDrive(double magnitude, double direction) {
-        robotDrive.mecanumDrive_Polar(magnitude, direction, 0);
+    public void autonomousDrive(double x, double y, double twist) {
+        robotDrive.mecanumDrive_Cartesian(x , y, twist * -0.7, 0);
     }
 }

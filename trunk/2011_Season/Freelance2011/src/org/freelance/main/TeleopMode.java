@@ -1,5 +1,7 @@
 package org.freelance.main;
 
+import edu.wpi.first.wpilibj.can.CANTimeoutException;
+
 /**
  * TeleopMode.java
  * @version 1.0.0
@@ -24,5 +26,13 @@ public class TeleopMode {
         robot.mecanumDrive.controllerDrive(robot.driveControl.getXAxis(),
                                            robot.driveControl.getYAxis(),
                                            robot.driveControl.getTwist());
+        /**
+         * Arm Process
+         */
+        try {
+            robot.arm.process(robot.driveControl);
+        } catch (CANTimeoutException ex) {
+            ex.printStackTrace();
+        }
     }
 }
