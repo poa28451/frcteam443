@@ -38,7 +38,9 @@ public class Constants {
     public final static int FR_ID = 24;
     public final static int RL_ID = 26;
     public final static int RR_ID = 23;
-    public final static int ARM_ID = 4;
+    public final static int ARM_ID = 27;
+
+    public final static int Extend_ID = 3;
 
     /**
      * Gyro Channel
@@ -73,8 +75,8 @@ public class Constants {
      /**
      * PS3 Remote Buttons
      */
-    public static final int BUTTON_X = 1;
-    public static final int BUTTON_A = 2;
+    public static final int BUTTON_X = 2;
+    public static final int BUTTON_A = 1;
     public static final int BUTTON_B = 3;
     public static final int BUTTON_Y = 4;
 

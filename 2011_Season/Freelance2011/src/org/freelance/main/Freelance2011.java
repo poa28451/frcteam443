@@ -1,12 +1,15 @@
 package org.freelance.main;
 
+import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 import org.freelance.logic.Linetracking;
+import org.freelance.sensors.Controller;
 import org.freelance.sensors.LogtechRemote;
 import org.freelance.sys.Arm;
 import org.freelance.sys.Claw;
 import org.freelance.sys.MecanumDrive;
+import org.freelance.util.Constants;
 
 /**
  * Freelance2011.java
@@ -30,6 +33,7 @@ public class Freelance2011 extends IterativeRobot {
     protected Claw claw;
     protected Arm arm;
     protected MecanumDrive mecanumDrive;
+    protected Gyro yawGyro;
 
     /**
      * Logic Objects
@@ -50,6 +54,7 @@ public class Freelance2011 extends IterativeRobot {
         claw = new Claw();
         arm = new Arm();
         mecanumDrive = new MecanumDrive();
+        yawGyro = new Gyro(Constants.GYRO_CHNL);
 
         /**
          * Initiate Logic Objects
@@ -58,6 +63,8 @@ public class Freelance2011 extends IterativeRobot {
         
         /**
          * Initiate Auto/Tele Operations
+         *
+
          */
         AutonomousInit();
         TeleopInit();
