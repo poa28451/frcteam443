@@ -41,6 +41,7 @@ public class Constants {
     public final static int ARM_ID = 27;
 
     public final static int Extend_ID = 3;
+    public final static int CLAW_ID = 4;
 
     /**
      * Gyro Channel
@@ -50,6 +51,12 @@ public class Constants {
     /**
      * Motor Inversion
      */
+    public final static boolean FL_INVERT = false;
+    public final static boolean FR_INVERT = true;
+    public final static boolean RL_INVERT = false;
+    public final static boolean RR_INVERT = true;
+
+    /*
     public final static boolean FL_INVERT = false;
     public final static boolean FR_INVERT = false;
     public final static boolean RL_INVERT = true;
@@ -68,9 +75,9 @@ public class Constants {
    /**
     * Linetracking Constant List
     */
-    public final static int CENTER_SLOT = 12;
-    public final static int LEFT_SLOT = 13;
-    public final static int RIGHT_SLOT = 14;
+    public final static int CENTER_SLOT = 3;
+    public final static int LEFT_SLOT = 2;
+    public final static int RIGHT_SLOT = 1;
 
      /**
      * PS3 Remote Buttons
@@ -93,5 +100,6 @@ public class Constants {
      */
     public static final int BACK_BUTTON = 9;
     public static final int START_BUTTON = 10;
+
 
 }

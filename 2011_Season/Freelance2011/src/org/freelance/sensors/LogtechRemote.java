@@ -63,12 +63,19 @@ public class LogtechRemote extends Controller {
         return activeButtons[Constants.BUTTON_Y];
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean RightTopBumper() {
         return activeButtons[Constants.RF_BUMPER];
     }
 
+    /**
+     * 
+     * @return
+     */
     public boolean RightBottomTrigger() {
         return activeButtons[Constants.RB_BUMPER];
     }
-
 }

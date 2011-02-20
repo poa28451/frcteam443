@@ -51,7 +51,7 @@ public class Controller extends Joystick {
         /**
          * 10 PS3 Buttons
          */
-        activeButtons = new boolean[10];
+        activeButtons = new boolean[12];
     }
 
     /**
@@ -69,13 +69,13 @@ public class Controller extends Joystick {
      * Sets the axis amt from the controller
      */
     public void getActiveAxis() {
-        yAxis = this.getX();
-        xAxis = this.getY();
+        yAxis = this.getY();
+        xAxis = this.getX();
         
         /*
          * Invert the Axis
          */
-        xAxis *= -1;
+        //xAxis *= -1;
         yAxis *= -1;
     }
 
