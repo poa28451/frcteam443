@@ -97,7 +97,7 @@ public class MecanumDrive {
 
     public void controllerDrive(double x, double y, double twist) {
         System.out.println(twist);
-        robotDrive.mecanumDrive_Cartesian(x , y, twist * -0.7, 0);
+        robotDrive.mecanumDrive_Cartesian(x , y, twist * 0.7, 0);
     }
 
     public void autonomousDrive(double x, double y, double twist) {
